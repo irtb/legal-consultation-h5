@@ -254,7 +254,7 @@ h5v8/
 ### 4.2 OSS 存储结构
 
 ```
-lp-bjzhwx-net/                       # Bucket
+BucketName/                       # Bucket
 │
 ├── tct/                             # 实际部署目录
 │   ├── index.html
@@ -438,7 +438,7 @@ head -n 20 dist/assets/js/core-7f2a3b4c.min.js
 ===================
 
 部署配置:
-Bucket: lp-bjzhwx-net
+Bucket: BucketName
 Endpoint: oss-cn-beijing.aliyuncs.com
 部署路径: tct
 备份目录: .backups
@@ -497,7 +497,7 @@ CDN 域名: [https://cdn.example.com](https://cdn.example.com)
 访问地址:
 CDN: [https://cdn.example.com/tct/](https://cdn.example.com/tct/)
 (CDN 刷新通常需要 5-10 分钟生效)
-OSS: [https://lp-bjzhwx-net.oss-cn-beijing.aliyuncs.com/tct/](https://lp-bjzhwx-net.oss-cn-beijing.aliyuncs.com/tct/)
+OSS: [https://BucketName.oss-cn-beijing.aliyuncs.com/tct/](https://BucketName.oss-cn-beijing.aliyuncs.com/tct/)
 
 备份信息:
 路径: .backups/tct/20251126\_170755
@@ -512,9 +512,9 @@ JS: 2 个
 动画: 1 个
 
 常用命令:
-查看文件: ossutil ls oss\://lp-bjzhwx-net/tct/ -r
-查看备份: ossutil ls oss\://lp-bjzhwx-net/.backups/tct/
-手动回滚: ossutil cp -r oss\://lp-bjzhwx-net/.backups/tct/20251126\_170755/ oss\://lp-bjzhwx-net/tct/ --update -f
+查看文件: ossutil ls oss\://BucketName/tct/ -r
+查看备份: ossutil ls oss\://BucketName/.backups/tct/
+手动回滚: ossutil cp -r oss\://BucketName/.backups/tct/20251126\_170755/ oss\://BucketName/tct/ --update -f
 备份管理: ./backup-manager.sh
 
 清理备份
@@ -730,17 +730,17 @@ Standard        42                      1,234,567
 
 ```bash
 # 手动创建备份
-ossutil cp -r oss://lp-bjzhwx-net/tct/ \
-    oss://lp-bjzhwx-net/.backups/tct/manual_$(date +%Y%m%d_%H%M%S)/ \
+ossutil cp -r oss://BucketName/tct/ \
+    oss://BucketName/.backups/tct/manual_$(date +%Y%m%d_%H%M%S)/ \
     --update
 
 # 手动恢复备份
-ossutil cp -r oss://lp-bjzhwx-net/.backups/tct/20251126_170755/ \
-    oss://lp-bjzhwx-net/tct/ \
+ossutil cp -r oss://BucketName/.backups/tct/20251126_170755/ \
+    oss://BucketName/tct/ \
     --update -f
 
 # 手动删除备份
-ossutil rm oss://lp-bjzhwx-net/.backups/tct/20251126_170755/ -r -f
+ossutil rm oss://BucketName/.backups/tct/20251126_170755/ -r -f
 ```
 
 ---
