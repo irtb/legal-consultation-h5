@@ -335,7 +335,6 @@
                     return AsyncHelper.delay(1500);
                 })
                 .then(function() {
-                    $('#floating-consultation-widget').fadeIn();
                     DOMEngine.scrollToLatestMessage();
                 });
         }
