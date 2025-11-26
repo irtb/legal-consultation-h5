@@ -19,7 +19,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourname/legal-consultation-h5.git
+git clone https://github.com/irtb/legal-consultation-h5.git
 cd legal-consultation-h5
 
 # 配置 OSS
