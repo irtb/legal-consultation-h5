@@ -138,7 +138,7 @@ sudo yum install bc
 
 ```bash
 # 如果是 git 项目
-git clone https://your-repo.git
+git clone https://irtb/legal-consultation-h5.git
 cd h5v8
 
 # 或者直接下载解压
@@ -1210,7 +1210,7 @@ html-minifier page2.html -o dist/page2.html ...
 如有问题，请联系：
 
 * 技术支持邮箱：[wayfarer_x@foxmail.com](mailto:wayfarer_x@foxmail.com)
-* 项目地址：[https://github.com/your-repo](https://github.com/your-repo)
+* 项目地址：[https://github.com/irtb/legal-consultation-h5](https://github.com/irtb/legal-consultation-h5)
 
 ---
 
