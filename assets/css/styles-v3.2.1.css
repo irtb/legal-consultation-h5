@@ -1,0 +1,941 @@
+/**
+ * Legal Consultation System Styles
+ * Version: 3.2.1
+ * Build Date: 2024
+ * Description: 完全重构的样式表，去除所有原始指纹
+ */
+
+/* ============================================
+   1. 基础重置
+   ============================================ */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 20px;
+    background-color: #fdfbf8;
+}
+
+body, div, p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, form, fieldset, legend, input, textarea, button, select {
+    margin: 0;
+    padding: 0;
+}
+
+input, textarea, button, select {
+    outline: none;
+    -webkit-appearance: none;
+    border: none;
+}
+
+body {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    background: #f4f4f4;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body, html {
+    height: 100%;
+}
+
+#legal-consultation-app, body {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    border: 0;
+    vertical-align: middle;
+}
+
+strong {
+    font-weight: 700;
+}
+
+/* ============================================
+   2. Flex 布局工具类
+   ============================================ */
+.flex-container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flex-container.align-center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.flex-container.dir-column {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.flex-container.justify-around {
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+}
+
+.flex-container > .flex-1 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.flex-container.wrap {
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.flex-container.justify-between {
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.flex-container.justify-end {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+/* ============================================
+   3. 动画定义
+   ============================================ */
+.anim-reveal {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    animation-name: slide-up-reveal;
+}
+
+@-webkit-keyframes slide-up-reveal {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes slide-up-reveal {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@-webkit-keyframes rotation-animation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotation-animation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes pulse-scale {
+    0% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse-scale {
+    0% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pulse-effect {
+    -webkit-animation: pulse-scale 0.5s ease-in-out alternate infinite;
+    animation: pulse-scale 0.5s ease-in-out alternate infinite;
+}
+
+.btn-scale-effect {
+    -webkit-transform: scale(0.99, 0.97);
+    transform: scale(0.99, 0.97);
+}
+
+/* ============================================
+   4. 主容器布局
+   ============================================ */
+#interactive-workflow-panel {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+}
+
+.stage-content {
+    position: relative;
+}
+
+.stage-wrapper {
+    position: relative;
+    padding: 0.8rem 0.8rem 5.33rem;
+}
+
+/* iOS 刘海屏 */
+@supports (padding: env(safe-area-inset-top)) {
+    .stage-wrapper {
+        padding-top: max(0.8rem, env(safe-area-inset-top));
+    }
+}
+
+/* iPhone X 及以上设备 */
+@media only screen 
+    and (device-width: 375px) 
+    and (device-height: 812px) 
+    and (-webkit-device-pixel-ratio: 3) {
+    .stage-wrapper {
+        padding-top: 1.2rem; /* 刘海屏稍微多一点 */
+    }
+}
+
+/* ============================================
+   5. 律师简介卡片
+   ============================================ */
+.profile-card-section {
+    padding: 0.53rem;
+    background: #fff;
+    border-radius: 0.43rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.advisor-portrait {
+    overflow: hidden;
+    width: 5.12rem;
+    height: 5.12rem;
+    border-radius: 0.43rem;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+}
+
+.advisor-portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-details {
+    margin-left: 0.59rem;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+}
+
+.advisor-name {
+    font-size: 0.8rem;
+    color: #333;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.advisor-name > span {
+    display: inline-block;
+    padding: 0.13rem 0.4rem;
+    color: #FFF;
+    background: #ed4c18;
+    font-size: 0.53rem;
+    font-weight: 400;
+    border-radius: 0.43rem 0.43rem 0.43rem 0;
+}
+
+.advisor-title {
+    font-size: 0.69rem;
+    color: #333;
+    line-height: 1.2;
+}
+
+.expertise-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32rem;
+}
+
+.expertise-tags > span {
+    border: 1px solid #ed4c18;
+    color: #ed4c18;
+    padding: 0.21rem 0.27rem;
+    border-radius: 0.11rem;
+    opacity: 0.8;
+    font-size: 0.64rem;
+}
+
+.service-summary {
+    color: #999;
+    font-size: 0.69rem;
+    line-height: 0.9rem;
+}
+
+/* ============================================
+   6. 对话区域
+   ============================================ */
+.thread-display-area {
+    margin-top: 1.07rem;
+}
+
+.bot-response-block {
+    margin-top: 0.53rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+}
+
+.sender-portrait {
+    overflow: hidden;
+    width: 1.92rem;
+    height: 1.92rem;
+    border-radius: 50%;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+}
+
+.sender-portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-container {
+    margin-left: 0.53rem;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    max-width: calc(100% - 2.45rem);
+}
+
+.message-header {
+    font-size: 0.64rem;
+    margin-bottom: 0.27rem;
+}
+
+.message-header .sender-name {
+    color: #333;
+    font-weight: 500;
+}
+
+.message-header .timestamp {
+    margin-left: 0.53rem;
+    color: #999;
+}
+
+.content-bubble {
+    margin-top: 0.53rem;
+    padding: 0.69rem;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 100%;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #333;
+    line-height: 1.5;
+    box-shadow: 0 0.11rem 0.27rem 0 rgba(232, 232, 232, 0.5);
+    background: #fff;
+    border-radius: 0.11rem 0.53rem 0.53rem 0.53rem;
+}
+
+.content-bubble p {
+    margin: 0.4rem 0;
+}
+
+.content-bubble p:first-child {
+    margin-top: 0;
+}
+
+.content-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.content-bubble > span,
+.content-bubble > p > span {
+    color: #ed4c18;
+}
+
+/* ============================================
+   7. 选项气泡
+   ============================================ */
+.choice-selection-bubble {
+    width: 100%;
+    max-width: 14.93rem;
+}
+
+.choice-options-list {
+    overflow: hidden;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.selectable-choice {
+    margin-top: 0.53rem;
+    width: 100%;
+    padding: 0.53rem 0.69rem;
+    line-height: 1.35rem;
+    text-align: center;
+    font-size: 0.83rem;
+    color: #FFF;
+    background: #ed4c18;
+    border-radius: 1.6rem;
+    position: relative;
+    cursor: pointer;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.selectable-choice:active {
+    opacity: 0.8;
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+}
+
+.selectable-choice:hover {
+    opacity: 0.9;
+}
+
+.choice-selected-state {
+    background: #3f458c !important;
+    color: white !important;
+}
+
+.selection-checkmark {
+    width: 0.75rem;
+    height: 0.75rem;
+    position: absolute;
+    left: 0.53rem;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    display: none;
+}
+
+.choice-selected-state .selection-checkmark {
+    display: block;
+}
+
+/* 多选确认按钮 */
+.multi-confirm-button {
+    border-radius: 0.27rem !important;
+    background: #ed4c18 !important;
+    color: white !important;
+}
+
+/* ============================================
+   8. 用户消息
+   ============================================ */
+.user-input-block {
+    margin-top: 0.8rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+.user-text-content {
+    padding: 0.69rem;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 80%;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #fff;
+    background: #ed4c18;
+    border-radius: 0.53rem 0.11rem 0.53rem 0.53rem;
+    word-break: break-word;
+}
+
+/* ============================================
+   9. 加载状态
+   ============================================ */
+.processing-indicator {
+    color: #318fec;
+}
+
+.processing-indicator span {
+    display: inline-block;
+    width: 0.91rem;
+    height: 0.91rem;
+    background: url(../images/processing-icon.png) no-repeat;
+    background-size: 100% 100%;
+    -webkit-animation: rotation-animation linear 3s infinite;
+    animation: rotation-animation linear 3s infinite;
+    vertical-align: middle;
+    margin-left: 0.27rem;
+}
+
+/* ============================================
+   10. 输入框区域
+   ============================================ */
+.input-section {
+    margin-top: 0.53rem;
+}
+
+.input-wrapper {
+    margin-top: 0.53rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 0.43rem;
+}
+
+.input-wrapper input {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    padding: 0 0.59rem;
+    height: 2.35rem;
+    color: #333;
+    font-size: 0.8rem;
+    border: 1px solid #c6c6c6;
+    border-radius: 0.21rem;
+    background: #fff;
+}
+
+.input-wrapper input::-webkit-input-placeholder {
+    color: #999;
+}
+
+.input-wrapper input::-moz-placeholder {
+    color: #999;
+}
+
+.input-wrapper input:-ms-input-placeholder {
+    color: #999;
+}
+
+.input-wrapper input::placeholder {
+    color: #999;
+}
+
+.submit-action-btn {
+    width: 4.48rem;
+    height: 2.35rem;
+    line-height: 2.35rem;
+    text-align: center;
+    background: #ed4c18;
+    border-radius: 0.21rem;
+    color: #fff;
+    font-size: 0.83rem;
+    font-weight: 400;
+    cursor: pointer;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.submit-action-btn:active {
+    opacity: 0.8;
+}
+
+/* ============================================
+   11. 咨询按钮
+   ============================================ */
+.consultation-cta-button {
+    width: 97.8%;
+    margin: 0.27rem;
+    line-height: 2.67rem;
+    display: block;
+    font-size: 1.07rem;
+    color: #fff;
+    border-radius: 0.27rem;
+    height: 2.67rem;
+    background-color: #e84723;
+    text-align: center;
+    cursor: pointer;
+    -webkit-transition: transform 0.3s, opacity 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.consultation-cta-button:active {
+    opacity: 0.9;
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+}
+
+.consultation-cta-button img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.6rem;
+    margin-left: 0.43rem;
+}
+
+/* ============================================
+   12. 浮动操作面板
+   ============================================ */
+.floating-action-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    max-width: 540px;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 3.2rem;
+    width: 100%;
+    display: none;
+    text-align: center;
+    overflow: hidden;
+    z-index: 999;
+}
+
+/* ============================================
+   13. 遮罩层
+   ============================================ */
+.overlay-backdrop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+}
+
+/* ============================================
+   14. 模态弹窗
+   ============================================ */
+.modal-popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 480px;
+    z-index: 1001;
+    display: none;
+}
+
+.modal-content-wrapper {
+    margin: 0 auto;
+    border-radius: 0.53rem;
+    background-color: white;
+    overflow: hidden;
+    box-shadow: 0 0.27rem 1.07rem rgba(0, 0, 0, 0.3);
+}
+
+.modal-content-wrapper img {
+    width: 100%;
+    display: block;
+}
+
+/* ============================================
+   15. 对话框
+   ============================================ */
+.dialog-frame {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100001;
+    display: none;
+}
+
+.dialog-content-box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 1.3rem 0 0;
+    width: 90%;
+    max-width: 18rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.27rem 1.07rem rgba(0, 0, 0, 0.3);
+}
+
+.dialog-content-box h3 {
+    margin: 0 0 0.8rem 0;
+    font-weight: bold;
+    font-size: 0.96rem;
+    text-align: center;
+    color: #333;
+}
+
+.dialog-text-content {
+    margin-bottom: 2rem;
+    padding: 0.1rem 0.8rem;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.dialog-text-content p {
+    margin: 0.53rem 0;
+    color: #666;
+}
+
+.dialog-text-content strong {
+    color: #07C160;
+    font-weight: 600;
+}
+
+.dialog-content-box button {
+    display: block;
+    width: 100%;
+    height: 2.67rem;
+    color: #111;
+    border: none;
+    background: #fff;
+    border-radius: 0 0 0.5rem 0.5rem;
+    border-top: 1px solid #ddd;
+    font-size: 0.91rem;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.dialog-content-box button:active {
+    background-color: #f5f5f5;
+}
+
+/* ============================================
+   16. 底部法律声明
+   ============================================ */
+.footer-legal-info {
+    position: fixed;
+    bottom: 0.27rem;
+    left: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    width: 100%;
+    color: #bbb;
+    z-index: 1;
+}
+
+.footer-legal-info p {
+    font-size: 0.69rem !important;
+    margin: 0.11rem 0;
+    line-height: 1.3;
+}
+
+/* ============================================
+   17. 进度条（可选）
+   ============================================ */
+.progress-bar-container {
+    padding: 0.21rem;
+    border-radius: 0.32rem;
+    box-shadow: inset 0 0.05rem 0.11rem rgba(0, 0, 0, 0.25), 0 0.05rem rgba(255, 255, 255, 0.08);
+    background: #f0f0f0;
+}
+
+.progress-bar-fill {
+    position: relative;
+    height: 0.85rem;
+    border-radius: 0.21rem;
+    transition: width 0.4s linear, background-color 0.4s linear;
+    box-shadow: 0 0 0.05rem 0.05rem rgba(0, 0, 0, 0.25), inset 0 0.05rem rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar-fill:before,
+.progress-bar-fill:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.progress-bar-fill:after {
+    z-index: 2;
+    bottom: 45%;
+    border-radius: 0.21rem;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+}
+
+/* ============================================
+   18. 工具类
+   ============================================ */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.no-scroll {
+    overflow: hidden !important;
+}
+
+/* ============================================
+   19. 响应式调整
+   ============================================ */
+@media (max-width: 375px) {
+    html {
+        font-size: 18px;
+    }
+    
+    .advisor-portrait {
+        width: 4rem;
+        height: 4rem;
+    }
+    
+    .profile-details {
+        margin-left: 0.43rem;
+    }
+    
+    .choice-selection-bubble {
+        width: 100%;
+    }
+    
+    .selectable-choice {
+        width: 100% !important;
+    }
+    
+    .modal-popup {
+        width: 95%;
+    }
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+    html {
+        font-size: 19px;
+    }
+}
+
+@media (min-width: 415px) and (max-width: 540px) {
+    html {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 541px) {
+    #legal-consultation-app {
+        max-width: 540px;
+        margin: 0 auto;
+        box-shadow: 0 0 1.07rem rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* ============================================
+   20. 打印样式（可选）
+   ============================================ */
+@media print {
+    .floating-action-panel,
+    .footer-legal-info,
+    .modal-popup,
+    .overlay-backdrop,
+    .dialog-frame {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   21. 暗黑模式支持（可选）
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+    /* 如需要暗黑模式，在此添加样式 */
+}
+
+/* ============================================
+   22. 兼容性修复
+   ============================================ */
+/* iOS Safari 安全区域适配 */
+@supports (padding: env(safe-area-inset-bottom)) {
+    .floating-action-panel {
+        padding-bottom: env(safe-area-inset-bottom);
+        height: calc(3.2rem + env(safe-area-inset-bottom));
+    }
+}
+
+/* 防止iOS双击缩放 */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    select, textarea, input {
+        font-size: 16px !important;
+    }
+}

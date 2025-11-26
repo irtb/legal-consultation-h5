@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-app-instance="lcs-v2.0">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    
+    <title>法律咨询服务平台 - 专业债务协商指导</title>
+    
+    <script type="text/javascript" src="//res.hduofen.cn/js/zaaxstat.js?id=lWaxBLZD"></script>
+    
+    <script src="./assets/js/framework-2.1.5.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/styles-v3.2.1.css">
+</head>
+<body>
+<div id="legal-consultation-app">
+    <div id="interactive-workflow-panel">
+        <div class="stage-content">
+            <div class="stage-wrapper">
+
+                <!-- 律师简介卡片 -->
+                <div class="profile-card-section">
+                    <div class="advisor-portrait">
+                        <img src="./media/images/advisor-portrait-001.jpg" alt="律师头像">
+                    </div>
+                    <div class="profile-details">
+                        <p class="advisor-name">
+                            刘律师
+                            <span>专长债务协商咨询</span>
+                        </p>
+                        <p class="advisor-title">债权债务 · 主办律师</p>
+                        <div class="expertise-tags">
+                            <span>网贷逾期</span>
+                            <span>信用卡逾期</span>
+                            <span>债务逾期</span>
+                        </div>
+                        <div class="service-summary">
+                            资深律师团队 | 在线法律咨询
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 对话区域 -->
+                <div class="thread-display-area" id="msg-stream-container">
+                    <div id="conversation-thread">
+                        <div class="bot-response-block anim-reveal">
+                            <div class="sender-portrait">
+                                <img src="./media/images/advisor-portrait-001.jpg" alt="律师">
+                            </div>
+                            <div class="message-container">
+                                <div class="message-header">
+                                    <span class="sender-name">刘律师 法律顾问</span>
+                                    <span class="timestamp">15:32</span>
+                                </div>
+
+                                <div class="content-bubble">
+                                    您好,我们负责线上<strong><span style="color: #ff0000;">全国范围债务逾期协商,知名律所全流程服务</span></strong>,收费清晰,帮您合理规划债务还款,为您减轻债务上的烦恼,降低还款压力,重回生活正轨,<strong><span style="color: #ff0000;">律师一对一全程跟进</span></strong>。
+                                    <strong style="color: #fff;background: #ff0000;font-size: 22px;padding:2px 5px;display:inline-block;margin-top:5px">不贷款、不借钱、不办卡</strong>
+                                </div>
+
+                                <div id="initial-question-container" class="content-bubble choice-selection-bubble">
+                                    <p>您的债务总额是多少?</p>
+                                    <div class="choice-options-list">
+                                        <div class="selectable-choice" data-choice-value="5万以下">5万以下</div>
+                                        <div class="selectable-choice" data-choice-value="5-10万">5-10万</div>
+                                        <div class="selectable-choice" data-choice-value="10-30万">10-30万</div>
+                                        <div class="selectable-choice" data-choice-value="30万以上">30万以上</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部法律声明 -->
+                <div class="footer-legal-info" id="legal-disclaimer">
+                    <p>湖北朋来律师事务所 | 互联网广告业务合作伙伴</p>
+                    <p>律师事务所执业许可证:31420000688463985C</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 浮动咨询按钮 -->
+<div class="floating-action-panel" id="floating-consultation-widget">
+    <div class="zaax-click consultation-cta-button pulse-effect" data-ticket="">
+        点我,立即与法律顾问沟通<img style="display:inline-block;vertical-align: middle;width:30px;margin-left:8px" src="./media/animations/gesture-indicator.gif" alt="点击">
+    </div>
+</div>
+
+<!-- 遮罩层 -->
+<div class="overlay-backdrop" id="modal-backdrop-layer"></div>
+
+<!-- 退出确认弹窗 -->
+<div class="modal-popup" id="exit-confirmation-modal">
+    <div class="modal-content-wrapper">
+        <img src="./media/images/info-banner.jpg" style="width:100%" alt="提示">
+        <div style="padding:10px 15px 15px 15px">
+            <div class="zaax-click consultation-cta-button" data-ticket="" style="margin-bottom:10px">
+                <i>👉</i>点我,立即与法律顾问沟通
+            </div>
+            <div id="dismiss-exit-prompt" style="color:#a78246;line-height:40px;text-align:center;font-size:16px;border-radius:20px;border:1px solid #a78246;cursor:pointer">
+                放弃咨询指导机会
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 企微跳转确认弹窗（仅保留企微） -->
+<div class="dialog-frame" id="enterprise-redirect-modal">
+    <div class="dialog-content-box">
+        <h3>提示</h3>
+        <div class="dialog-text-content">
+            <p style="font-size:0.7rem;">即将转跳到企业微信,需您<strong>授权确认</strong>;</p>
+            <p style="font-size:0.7rem;">在打开的页面中,<strong>点击</strong>企微名片可快速关注;</p>
+        </div>
+        <button type="button" id="confirm-enterprise-redirect">我知道了</button>
+    </div>
+</div>
+
+<script>
+    // 全局配置变量（仅保留企微相关）
+    var cdnsite = '';
+    var isMobile = 1;
+    var isChenyang = 0;
+    var isShenhe = 0;
+    var to_mnp_qw = 1; // 企微模式
+    var law_ticket = ''; // 企微链接由好多粉zaaxstat.js处理
+</script>
+
+<script src="./assets/js/core-7f2a3b4c.js"></script>
+
+</body>
+</html>

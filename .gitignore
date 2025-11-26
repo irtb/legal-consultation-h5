@@ -1,0 +1,18 @@
+# 构建输出
+dist/
+
+# OSS 配置（包含敏感信息）
+oss-config.sh
+
+# Node modules
+node_modules/
+
+# 临时文件
+*.tmp
+*.log
+*.swp
+.DS_Store
+
+# 备份文件
+*.bak
+*~
