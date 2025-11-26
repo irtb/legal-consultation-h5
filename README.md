@@ -17,7 +17,7 @@
 
 ## 🚀 快速开始
 
-\`\`\`bash
+```bash
 # 克隆仓库
 git clone https://github.com/yourname/legal-consultation-h5.git
 cd legal-consultation-h5
@@ -29,13 +29,11 @@ vim oss-config.sh
 # 构建和部署
 ./build.sh
 ./deploy.sh h5/prod
-\`\`\`
+```
 
 ## 📚 文档
 
 - [使用手册](./README_MANUAL.md)
-- [部署指南](./docs/deploy.md)
-- [API 文档](./docs/api.md)
 
 ## 📄 许可证
 
