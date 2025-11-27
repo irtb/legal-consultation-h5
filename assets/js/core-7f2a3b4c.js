@@ -84,15 +84,13 @@
                 const container = self.cache.workflowPanel;
                 
                 if (container.length) {
-                    // 计算滚动目标
                     const targetScroll = container[0].scrollHeight - container[0].clientHeight;
                     
-                    // 平滑滚动
                     container.animate({
                         scrollTop: targetScroll
-                    }, 1500, 'swing');
+                    }, 1000, 'swing');
                 }
-            }, 100);
+            }, 800);
         }
     };
 
@@ -165,8 +163,7 @@
             markup += '</div>';
 
             $('#conversation-thread').append(markup);
-            EventBinder.bindChoiceEvents();
-            DOMEngine.scrollToLatestMessage();
+            // EventBinder.bindChoiceEvents();
         },
 
         renderUserResponse: function(responseText) {
@@ -200,6 +197,44 @@
             DOMEngine.scrollToLatestMessage();
         },
 
+        // // ✅ 直接显示咨询建议，移除"分析中"
+        // renderFinalConsultationResult: function() {
+        //     const timestamp = TimeFormatter.getCurrentTime();
+
+        //     let markup = '<div class="bot-response-block anim-reveal">';
+        //     markup += '   <div class="sender-portrait">';
+        //     markup += '       <img src="./media/images/advisor-portrait-001.jpg" alt="律师">';
+        //     markup += '   </div>';
+        //     markup += '   <div class="message-container">';
+        //     markup += '       <div class="message-header">';
+        //     markup += '           <span class="sender-name">刘律师 ' + (typeof isShenhe !== 'undefined' && isShenhe ? "劳动法顾问" : "法律顾问") + '</span>';
+        //     markup += '           <span class="timestamp">' + timestamp + '</span>';
+        //     markup += '       </div>';
+        //     markup += '       <div class="content-bubble" id="consultation-recommendation">';
+        //     markup += '<p style="margin-bottom: 0.5rem;">我们已经了解您的基本情况，因为当前是临时咨询，<strong><span style="color: rgb(255, 0, 0);">请您添加企业微信，我为您安排律师进一步了解您的情况，为您制定一套还款方案。</span></strong>点击咨询，在线律师</p>';
+        //     markup += '<p style="margin-bottom: 0.5rem;">(名额有限，5分钟内添加有效)</p>';
+        //     markup += '       <div>';
+        //     markup += '           <div class="zaax-click consultation-cta-button" data-ticket="" style="margin-bottom:5px">企微咨询</div>';
+        //     markup += '       </div>';
+        //     markup += '   </div>';
+        //     markup += '</div>';
+
+        //     $('#conversation-thread').append(markup);
+        //     DOMEngine.scrollToLatestMessage();
+
+        //     // ✅ 简化延迟
+        //     setTimeout(function() {
+        //         $('#floating-consultation-widget').fadeIn();
+                
+        //         if (typeof isChenyang !== 'undefined' && !isChenyang) {
+        //             window.history.pushState({title: "consultation", url: "#"}, '', "#");
+        //         }
+                
+        //         ZaaxCompatibility.refreshBindings();
+        //     }, 400);
+        // }
+
+        // 自定义时间
         renderFinalConsultationResult: function() {
             const timestamp = TimeFormatter.getCurrentTime();
 
@@ -226,26 +261,30 @@
 
             $('#conversation-thread').append(markup);
 
+            // ✅ 自定义各个时间
+            const ANALYSIS_DELAY = 1000;        // "分析中"显示时长
+            const FADEOUT_SPEED = 300;         // fadeOut速度
+            const BUTTON_DELAY = 500;          // 按钮弹出延迟
+            const SCROLL_DELAY = 300;          // 滚动延迟
+
             setTimeout(function() {
-                $('#analysis-in-progress').fadeOut(500, function() {
+                $('#analysis-in-progress').fadeOut(FADEOUT_SPEED, function() {
                     $('#consultation-recommendation').fadeIn();
                     DOMEngine.scrollToLatestMessage();
 
                     setTimeout(function() {
                         $('#floating-consultation-widget').fadeIn();
-                    }, 500);
+                    }, BUTTON_DELAY);
 
                     setTimeout(function() {
                         DOMEngine.scrollToLatestMessage();
                         if (typeof isChenyang !== 'undefined' && !isChenyang) {
                             window.history.pushState({title: "consultation", url: "#"}, '', "#");
                         }
-                        
-                        // 通知好多粉重新绑定
                         ZaaxCompatibility.refreshBindings();
-                    }, 800);
+                    }, SCROLL_DELAY);
                 });
-            }, 1000);
+            }, ANALYSIS_DELAY);
         }
     };
 
@@ -267,7 +306,6 @@
             if ($clickedElement.hasClass('processing')) return;
             $clickedElement.addClass('processing');
             
-            // 保存数据
             if (AppState.get('currentStepIndex') >= 0 && 
                 AppState.get('currentStepIndex') < ConsultationFlowData.length) {
                 const currentStageKey = ConsultationFlowData[AppState.get('currentStepIndex')].stageKey;
@@ -276,52 +314,46 @@
                 AppState.set('userInputData', currentData);
             }
 
-            // 立即隐藏选项
             $clickedElement.parent().hide();
             AnalyticsModule.recordEvent(selectedText);
             
-            // 立即渲染用户回复
             UIRenderer.renderUserResponse(selectedText);
-            DOMEngine.scrollToLatestMessage();
 
             AppState.increment('currentStepIndex');
 
-            // 延迟渲染新问题
             setTimeout(function() {
                 if (AppState.get('currentStepIndex') < ConsultationFlowData.length) {
                     if (selectedText === '5万以下') {
-                        InteractionHandler.handleSpecialCase('很抱歉，您的债务金额过低...');
+                        InteractionHandler.handleSpecialCase('很抱歉，您的债务金额过低，协商还款有一定的成本，对您来说并不是合理的选择，建议您自行还款。');
+                    } else if (selectedText === '借款，贷款') {
+                        InteractionHandler.handleSpecialCase('很抱歉，借款，贷款业务暂时无法受理。');
                     } else if (selectedText === '个人借款债务' || selectedText === '房贷或车贷债务') {
                         InteractionHandler.handleSpecialCase('很抱歉，个人借款纠纷/房贷车贷暂时无法受理。');
                     } else if (selectedText === '逾期1年以上') {
-                        InteractionHandler.handleSpecialCase('您的逾期时间过久...');
+                        InteractionHandler.handleSpecialCase('您的逾期时间过久，暂时无法受理，建议您可先专心工作后咨询。');
                     } else {
                         UIRenderer.renderQuestionBlock(
                             ConsultationFlowData[AppState.get('currentStepIndex')]
                         );
+                        DOMEngine.scrollToLatestMessage();  // 在这里统一滚动
                     }
                 } else {
                     if (selectedText === '没有什么收入，也没有意愿还款') {
-                        InteractionHandler.handleSpecialCase('为了您能够重回生活正轨...');
+                        InteractionHandler.handleSpecialCase('为了您能够重回生活正轨，帮助您进行债务协商也是需要您正常进行偿还，在您还没有足够的经济能力还款之前，建议先努力工作，没有还款意愿也无法进行协商');
                         return;
                     }
                     DataSubmitter.submitUserData('');
-                    setTimeout(() => UIRenderer.renderFinalConsultationResult(), 1500);
+                    UIRenderer.renderFinalConsultationResult();
                 }
                 $('#legal-disclaimer').hide();
-            }, 1000);
+            }, 400);
         },
 
         handleSpecialCase: function(message) {
-            AsyncHelper.delay(800)
-                .then(function() {
-                    UIRenderer.renderUnableToProcessMessage(message);
-                    DOMEngine.scrollToLatestMessage();
-                    return AsyncHelper.delay(1500);
-                })
-                .then(function() {
-                    DOMEngine.scrollToLatestMessage();
-                });
+            setTimeout(function() {
+                UIRenderer.renderUnableToProcessMessage(message);
+                // 移除这里的滚动调用
+            }, 400);
         }
     };
 
@@ -404,7 +436,9 @@
     // 事件绑定
     const EventBinder = {
         bindChoiceEvents: function() {
-            $('.selectable-choice').off('click').on('click', InteractionHandler.handleChoiceSelection);
+            // $('.selectable-choice').off('click').on('click', InteractionHandler.handleChoiceSelection);
+            $('#conversation-thread').off('click', '.selectable-choice')
+            .on('click', '.selectable-choice', InteractionHandler.handleChoiceSelection);
         },
 
         bindModalEvents: function() {
