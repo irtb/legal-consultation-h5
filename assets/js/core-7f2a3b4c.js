@@ -79,33 +79,20 @@
         },
 
         scrollToLatestMessage: function() {
-            const container = this.cache.threadDisplay[0];
-            const content = this.cache.conversationThread[0];
-            
-            if (!container || !content) return;
-            
-            container.style.height = content.clientHeight + 'px';
-            
+            const self = this;
             setTimeout(() => {
-                const scrollTarget = this.cache.stageWrapper[0].clientHeight - 
-                                   this.cache.workflowPanel[0].clientHeight;
+                const container = self.cache.workflowPanel;
                 
-                if (scrollTarget > 0) {
-                    let steps = 60;
-                    let currentPos = this.cache.workflowPanel[0].scrollTop;
-                    const increment = (scrollTarget - currentPos) / steps;
+                if (container.length) {
+                    // 计算滚动目标
+                    const targetScroll = container[0].scrollHeight - container[0].clientHeight;
                     
-                    const scrollInterval = setInterval(() => {
-                        if (steps > 0) {
-                            steps--;
-                            this.cache.workflowPanel[0].scrollTop = currentPos + increment;
-                            currentPos += increment;
-                        } else {
-                            clearInterval(scrollInterval);
-                        }
-                    }, 10);
+                    // 平滑滚动
+                    container.animate({
+                        scrollTop: targetScroll
+                    }, 1500, 'swing');
                 }
-            }, 0);
+            }, 100);
         }
     };
 
@@ -183,14 +170,12 @@
         },
 
         renderUserResponse: function(responseText) {
-            let markup = '<div class="user-input-block anim-reveal">';
+            let markup = '<div class="user-input-block">';
             markup += '    <div class="user-text-content">';
             markup += responseText;
             markup += '    </div>';
             markup += '</div>';
-
             $('#conversation-thread').append(markup);
-            DOMEngine.scrollToLatestMessage();
         },
 
         renderUnableToProcessMessage: function(messageContent) {
@@ -258,9 +243,9 @@
                         
                         // 通知好多粉重新绑定
                         ZaaxCompatibility.refreshBindings();
-                    }, 1500);
+                    }, 800);
                 });
-            }, 2000);
+            }, 1000);
         }
     };
 
@@ -279,6 +264,10 @@
             const $clickedElement = $(this);
             const selectedText = $clickedElement.text();
             
+            if ($clickedElement.hasClass('processing')) return;
+            $clickedElement.addClass('processing');
+            
+            // 保存数据
             if (AppState.get('currentStepIndex') >= 0 && 
                 AppState.get('currentStepIndex') < ConsultationFlowData.length) {
                 const currentStageKey = ConsultationFlowData[AppState.get('currentStepIndex')].stageKey;
@@ -287,44 +276,40 @@
                 AppState.set('userInputData', currentData);
             }
 
-            $clickedElement.parent().fadeOut();
+            // 立即隐藏选项
+            $clickedElement.parent().hide();
             AnalyticsModule.recordEvent(selectedText);
-
-            setTimeout(function() {
-                UIRenderer.renderUserResponse(selectedText);
-            }, 500);
+            
+            // 立即渲染用户回复
+            UIRenderer.renderUserResponse(selectedText);
+            DOMEngine.scrollToLatestMessage();
 
             AppState.increment('currentStepIndex');
 
-            if (AppState.get('currentStepIndex') < ConsultationFlowData.length) {
-                if (selectedText === '5万以下') {
-                    InteractionHandler.handleSpecialCase('很抱歉，您的债务金额过低，协商还款有一定的成本，对您来说并不是合理的选择，建议您自行还款。');
-                } else if (selectedText === '借款，贷款') {
-                    InteractionHandler.handleSpecialCase('很抱歉，借款，贷款业务暂时无法受理。');
-                } else if (selectedText === '个人借款债务' || selectedText === '房贷或车贷债务') {
-                    InteractionHandler.handleSpecialCase('很抱歉，个人借款纠纷/房贷车贷暂时无法受理。');
-                } else if (selectedText === '逾期1年以上') {
-                    InteractionHandler.handleSpecialCase('您的逾期时间过久，暂时无法受理，建议您可先专心工作后咨询。');
+            // 延迟渲染新问题
+            setTimeout(function() {
+                if (AppState.get('currentStepIndex') < ConsultationFlowData.length) {
+                    if (selectedText === '5万以下') {
+                        InteractionHandler.handleSpecialCase('很抱歉，您的债务金额过低...');
+                    } else if (selectedText === '个人借款债务' || selectedText === '房贷或车贷债务') {
+                        InteractionHandler.handleSpecialCase('很抱歉，个人借款纠纷/房贷车贷暂时无法受理。');
+                    } else if (selectedText === '逾期1年以上') {
+                        InteractionHandler.handleSpecialCase('您的逾期时间过久...');
+                    } else {
+                        UIRenderer.renderQuestionBlock(
+                            ConsultationFlowData[AppState.get('currentStepIndex')]
+                        );
+                    }
                 } else {
-                    setTimeout(function() {
-                        UIRenderer.renderQuestionBlock(ConsultationFlowData[AppState.get('currentStepIndex')]);
-                    }, 800);
+                    if (selectedText === '没有什么收入，也没有意愿还款') {
+                        InteractionHandler.handleSpecialCase('为了您能够重回生活正轨...');
+                        return;
+                    }
+                    DataSubmitter.submitUserData('');
+                    setTimeout(() => UIRenderer.renderFinalConsultationResult(), 1500);
                 }
-            } else {
-                if (selectedText === '没有什么收入，也没有意愿还款') {
-                    InteractionHandler.handleSpecialCase('为了您能够重回生活正轨，帮助您进行债务协商也是需要您正常进行偿还，在您还没有足够的经济能力还款之前，建议先努力工作，没有还款意愿也无法进行协商');
-                    return;
-                }
-
-                DataSubmitter.submitUserData('');
-                setTimeout(function() {
-                    UIRenderer.renderFinalConsultationResult();
-                }, 1500);
-            }
-
-            try {
                 $('#legal-disclaimer').hide();
-            } catch (error) {}
+            }, 1000);
         },
 
         handleSpecialCase: function(message) {

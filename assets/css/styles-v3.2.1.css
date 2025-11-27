@@ -112,11 +112,12 @@ strong {
    3. 动画定义
    ============================================ */
 .anim-reveal {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
     animation-name: slide-up-reveal;
+    will-change: transform, opacity;
 }
 
 @-webkit-keyframes slide-up-reveal {
@@ -141,7 +142,7 @@ strong {
     100% {
         opacity: 1;
         -webkit-transform: none;
-        transform: none;
+        transform: translate3d(0, 0, 0);
     }
 }
 
@@ -207,6 +208,7 @@ strong {
     -webkit-overflow-scrolling: touch;
     position: relative;
 }
+
 
 .stage-content {
     position: relative;
@@ -442,9 +444,10 @@ strong {
     border-radius: 1.6rem;
     position: relative;
     cursor: pointer;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    transform: translateZ(0);
     user-select: none;
+    -webkit-transition: all 0.3s ease;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -453,7 +456,7 @@ strong {
 .selectable-choice:active {
     opacity: 0.8;
     -webkit-transform: scale(0.98);
-    transform: scale(0.98);
+    transform: scale(0.98) translateZ(0);
 }
 
 .selectable-choice:hover {
