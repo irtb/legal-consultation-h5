@@ -279,7 +279,7 @@
                     setTimeout(function() {
                         DOMEngine.scrollToLatestMessage();
                         if (typeof isChenyang !== 'undefined' && !isChenyang) {
-                            window.history.pushState({title: "consultation", url: "#"}, '', "#");
+                            // window.history.pushState({title: "consultation", url: "#"}, '', "#");
                         }
                         ZaaxCompatibility.refreshBindings();
                     }, SCROLL_DELAY);
@@ -452,14 +452,14 @@
                 $('.modal-popup').hide();
             });
 
-            if (typeof isChenyang !== 'undefined' && !isChenyang) {
-                window.addEventListener("popstate", function(e) {
-                    if ($("#exit-confirmation-modal").css('display') !== "block") {
-                        $("#modal-backdrop-layer").show();
-                        $("#exit-confirmation-modal").show();
-                    }
-                }, false);
-            }
+            // if (typeof isChenyang !== 'undefined' && !isChenyang) {
+            //     window.addEventListener("popstate", function(e) {
+            //         if ($("#exit-confirmation-modal").css('display') !== "block") {
+            //             $("#modal-backdrop-layer").show();
+            //             $("#exit-confirmation-modal").show();
+            //         }
+            //     }, false);
+            // }
 
             // 企微跳转确认（由zaaxstat.js处理，这里只是关闭弹窗）
             $('#confirm-enterprise-redirect').on('click', function() {
